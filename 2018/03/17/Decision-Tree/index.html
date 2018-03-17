@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x)) 123456789def get_shanno_entorpy(values):    &apos;&apos;&apos;    根">
+<meta name="description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x))">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Decision Tree">
 <meta property="og:url" content="http://yoursite.com/2018/03/17/Decision-Tree/index.html">
 <meta property="og:site_name" content="Think Island">
-<meta property="og:description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x)) 123456789def get_shanno_entorpy(values):    &apos;&apos;&apos;    根">
+<meta property="og:description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x))">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-17T02:25:46.852Z">
+<meta property="og:updated_time" content="2018-03-17T02:37:09.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Decision Tree">
-<meta name="twitter:description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x)) 123456789def get_shanno_entorpy(values):    &apos;&apos;&apos;    根">
+<meta name="twitter:description" content="12345import mathimport copyimport uuidimport picklefrom collections import defaultdict, namedtuple 信息量I = -log(P(x)) 信息熵信息量的期望值 H = -ΣP(x)log(P(x))">
 
 
 
@@ -334,6 +334,7 @@
 <h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>I = -log(P(x))</p>
 <h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>信息量的期望值</p>
 <p>H = -ΣP(x)log(P(x))</p>
+<a id="more"></a>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_shanno_entorpy</span><span class="params">(values)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    根据给定列表中的值计算其Shanno Entropy</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    uniq_vals = set(values)</span><br><span class="line">    vals_num = &#123;key: values.count(key) <span class="keyword">for</span> key <span class="keyword">in</span> uniq_vals&#125;</span><br><span class="line">    probs = [v/len(values) <span class="keyword">for</span> k, v <span class="keyword">in</span> vals_num.items()]</span><br><span class="line">    entorpy = sum([-prob*math.log2(prob) <span class="keyword">for</span> prob <span class="keyword">in</span> probs])</span><br><span class="line">    <span class="keyword">return</span> entorpy</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">values = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">3</span>]</span><br><span class="line">get_shanno_entorpy(values)</span><br></pre></td></tr></table></figure>
 <pre><code>2.256564762130954
