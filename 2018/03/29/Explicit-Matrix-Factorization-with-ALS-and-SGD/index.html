@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="REC," />
 
 
 
@@ -94,13 +94,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Think Island">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="一篇非常好的博文  一些假设我们有一个用户-物品评分矩阵：  每个用户可以被k个属性或特征描述 每个物品也可以用一组一致的k个属性或特征描述 如果我们将用户的每个特征乘以物品的相应特征并将所有内容加在一起，那么将会得到用户给予物品的评级的近似值矩阵。  不用知道特征和属性具体是什么，也不用知道k的值为多少。我们只需要选一个k值，然后进行学习即可。  怎么学习？最小化损失函数！  数学公式用户u对">
+<meta name="keywords" content="REC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Explicit Matrix Factorization with ALS and SGD">
+<meta property="og:url" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/index.html">
 <meta property="og:site_name" content="Think Island">
+<meta property="og:description" content="一篇非常好的博文  一些假设我们有一个用户-物品评分矩阵：  每个用户可以被k个属性或特征描述 每个物品也可以用一组一致的k个属性或特征描述 如果我们将用户的每个特征乘以物品的相应特征并将所有内容加在一起，那么将会得到用户给予物品的评级的近似值矩阵。  不用知道特征和属性具体是什么，也不用知道k的值为多少。我们只需要选一个k值，然后进行学习即可。  怎么学习？最小化损失函数！  数学公式用户u对">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_6_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_7_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_9_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_13_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_17_0.png">
+<meta property="og:updated_time" content="2018-03-29T01:28:18.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Think Island">
+<meta name="twitter:title" content="Explicit Matrix Factorization with ALS and SGD">
+<meta name="twitter:description" content="一篇非常好的博文  一些假设我们有一个用户-物品评分矩阵：  每个用户可以被k个属性或特征描述 每个物品也可以用一组一致的k个属性或特征描述 如果我们将用户的每个特征乘以物品的相应特征并将所有内容加在一起，那么将会得到用户给予物品的评级的近似值矩阵。  不用知道特征和属性具体是什么，也不用知道k的值为多少。我们只需要选一个k值，然后进行学习即可。  怎么学习？最小化损失函数！  数学公式用户u对">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_6_0.png">
 
 
 
@@ -129,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/"/>
 
 
 
 
 
-  <title>Think Island</title>
+  <title>Explicit Matrix Factorization with ALS and SGD | Think Island</title>
   
 
 
@@ -160,9 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -245,9 +254,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -277,9 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/" itemprop="url">Explicit Matrix Factorization with ALS and SGD</a></h1>
+          <h1 class="post-title" itemprop="name headline">Explicit Matrix Factorization with ALS and SGD</h1>
         
 
         <div class="post-meta">
@@ -329,9 +336,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>一篇非常好的<a href="http://blog.ethanrosenthal.com/2016/01/09/explicit-matrix-factorization-sgd-als/" target="_blank" rel="noopener">博文</a></p>
 </blockquote>
 <h3 id="一些假设"><a href="#一些假设" class="headerlink" title="一些假设"></a>一些假设</h3><p>我们有一个用户-物品评分矩阵：</p>
@@ -630,8 +635,6 @@ Best iterations: 200
 </code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#画出最优模型的训练曲线</span></span><br><span class="line">plot_learning_curve(iter_array, best_params[<span class="string">'model'</span>])</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/output_17_0.png" alt="png"></p>
 
-          
-        
       
     </div>
     
@@ -646,395 +649,36 @@ Best iterations: 200
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/23/Logistic-Regression/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lhy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Think Island">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/23/Logistic-Regression/" itemprop="url">Logistic Regression</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T09:53:47+08:00">
-                2018-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/REC/" rel="tag"># REC</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> SMS_parse <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
-<h3 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h3><h4 id="回归与分类"><a href="#回归与分类" class="headerlink" title="回归与分类"></a>回归与分类</h4><p>对于一个给定的训练集（training set）(x,y)，其中y=h(x)=h(x1,x2,…,xn)，在h未知的情况下，求得h或者h的近似解的过程，被称为猜测（hypothesis）。hypothesis的目的是，能在给定x的情况下，预测y。</p>
-<p>如果y是连续函数（定量），那么这个过程叫做回归（regression）问题。如果y是离散函数（定性），那么这个过程叫做分类（classification）。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/23/Logistic-Regression/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/23/Logistic-Regression/" rel="next" title="Logistic Regression">
+                <i class="fa fa-chevron-left"></i> Logistic Regression
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/19/Naive-Bayes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lhy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Think Island">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/19/Naive-Bayes/" itemprop="url">Naive_Bayes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T16:54:03+08:00">
-                2018-03-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
-<h3 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h3><script type="math/tex; mode=display">P(A|B) = \frac{P(B|A)P(A)}{P(B)}</script><p>贝叶斯模型是通过贝叶斯公式去计算某个样本在不同类别条件下的条件概率并取具有最大条件概率的那个类型作为分类的预测结果。</p>
-<h3 id="实现贝叶斯分类器"><a href="#实现贝叶斯分类器" class="headerlink" title="实现贝叶斯分类器"></a>实现贝叶斯分类器</h3><h4 id="文本分类"><a href="#文本分类" class="headerlink" title="文本分类"></a>文本分类</h4><p>针对不同的文本，我们可以将所有出现的单词作为数据特征向量，统计每个文本中出现词条的数目(或者是否出现某个词条)作为数据向量。这样一个文本就可以处理成一个整数列表，并且长度是所有词条的数目.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/19/Naive-Bayes/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/18/User-based-CF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lhy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Think Island">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/18/User-based-CF/" itemprop="url">User-based CF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T10:44:50+08:00">
-                2018-03-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment">#from texttable import Texttable</span></span><br></pre></td></tr></table></figure>
-<h2 id="基于用户的协同过滤"><a href="#基于用户的协同过滤" class="headerlink" title="基于用户的协同过滤"></a>基于用户的协同过滤</h2><p>基于用户的协同过滤算法主要包括两个步骤：</p>
-<ul>
-<li>计算用户之间的相似度</li>
-<li>将相似用户喜欢的但目标用户没有听说过的物品推荐给目标用户</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/18/User-based-CF/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1044,265 +688,11 @@ Best iterations: 200
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/17/Decision-Tree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lhy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Think Island">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/17/Decision-Tree/" itemprop="url">Decision Tree</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-17T10:24:00+08:00">
-                2018-03-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict, namedtuple</span><br></pre></td></tr></table></figure>
-<h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>I = -log(P(x))</p>
-<h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>信息量的期望值</p>
-<p>H = -ΣP(x)log(P(x))</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/17/Decision-Tree/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lhy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Think Island">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/15/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T10:32:07+08:00">
-                2018-03-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1310,6 +700,10 @@ Best iterations: 200
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -1330,8 +724,17 @@ Best iterations: 200
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/me.jpg"
@@ -1397,6 +800,22 @@ Best iterations: 200
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些假设"><span class="nav-number">1.</span> <span class="nav-text">一些假设</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学公式"><span class="nav-number">2.</span> <span class="nav-text">数学公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小化损失函数"><span class="nav-number">3.</span> <span class="nav-text">最小化损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ALS（交替最小二乘法）"><span class="nav-number">3.1.</span> <span class="nav-text">ALS（交替最小二乘法）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#求导"><span class="nav-number">3.1.1.</span> <span class="nav-text">求导</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实现"><span class="nav-number">3.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SGD（随机梯度下降）"><span class="nav-number">3.2.</span> <span class="nav-text">SGD（随机梯度下降）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#新的评分-损失公式"><span class="nav-number">3.2.1.</span> <span class="nav-text">新的评分/损失公式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#变量更新规则"><span class="nav-number">3.2.2.</span> <span class="nav-text">变量更新规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码实现"><span class="nav-number">3.2.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1510,10 +929,10 @@ Best iterations: 200
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
