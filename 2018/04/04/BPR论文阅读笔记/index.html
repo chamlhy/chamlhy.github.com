@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="REC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
+<meta name="keywords" content="REC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BPR论文阅读笔记">
+<meta property="og:url" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/index.html">
+<meta property="og:site_name" content="Think Island">
+<meta property="og:description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/性质.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/实验结果.png">
+<meta property="og:updated_time" content="2018-04-04T13:22:17.253Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BPR论文阅读笔记">
+<meta name="twitter:description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
+<meta name="twitter:image" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/性质.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/04/BPR论文阅读笔记/"/>
+
+
+
+
+
+  <title>BPR论文阅读笔记 | Think Island</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Think Island</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/04/BPR论文阅读笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lhy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Think Island">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BPR论文阅读笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-04T21:20:15+08:00">
+                2018-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="BPR-Bayesian-Personalized-Ranking-from-Implicit-Feedback"><a href="#BPR-Bayesian-Personalized-Ranking-from-Implicit-Feedback" class="headerlink" title="BPR: Bayesian Personalized Ranking from Implicit Feedback"></a>BPR: Bayesian Personalized Ranking from Implicit Feedback</h1><p><a href="https://arxiv.org/pdf/1205.2618.pdf" target="_blank" rel="noopener">论文地址</a></p>
+<h2 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h2><ul>
+<li>提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。</li>
+<li>为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。</li>
+<li>展示如何应用LEARNBPR到matrix factorization和adaptive kNN。</li>
+<li>实验验证BPR比其他学习方法好，甚至超过了非个性化推荐的上限。</li>
+</ul>
+<a id="more"></a>
+<h2 id="个性化推荐"><a href="#个性化推荐" class="headerlink" title="个性化推荐"></a>个性化推荐</h2><p>论文的方法考虑一对物品i和j，如果用户u看了i没有看j，则在用户u的偏爱程度上i&gt;j，但若用户同时看了i和j，或同时没有看i和j，则用户u对i和j的偏爱程度无法区分。</p>
+<p>定义符号$&gt;_u$，代表u的期望但潜在的偏好结构，有如下性质：<br><img src="/2018/04/04/BPR论文阅读笔记/性质.png" alt="性质"></p>
+<p>于是训练数据$D_S$是UxIxI的规模。</p>
+<script type="math/tex; mode=display">D_S:=\{(u,i,j)|i \in I_u^+ \land j \in I - I_u^+ \}</script><p>这个有两个优点：</p>
+<ul>
+<li>训练数据同时包括了正负对和缺失值。这样缺失值就真真切切是我们要预测的值，同时保证了训练集和测试集的不相交。</li>
+<li>训练数据集是为了真实的排名目标而建，不是为了预测用户购买的可能性。</li>
+</ul>
+<h2 id="BPR"><a href="#BPR" class="headerlink" title="BPR"></a>BPR</h2><h3 id="BPR-OPT"><a href="#BPR-OPT" class="headerlink" title="BPR-OPT"></a>BPR-OPT</h3><ul>
+<li><p>目标：对每一个物品i最大化</p>
+<script type="math/tex; mode=display">p(\Theta | >_u) \propto p(>_u|\Theta )p(\Theta )</script><p>  其中，$\Theta$是任意模型的参数向量，$&gt;_u$是u的期望但潜在的偏好结构</p>
+</li>
+<li><p>假设：每一个用户的每一对物品对$<i,j>$的排序相对其他对都是独立的。</i,j></p>
+</li>
+<li><p>基于以上假设化简式子，对于所有的u有：</p>
+<script type="math/tex; mode=display">\prod_{u\in U}p(>_u | \Theta ) = \prod_{(u,i,j)\in UxIxI} p(i >_u j |\Theta )^{\delta((u,i,j)\in D_S)}*(1-p(i >_u j |\Theta ))^{\delta((u,i,j)\notin D_S)}</script><p>  其中，$\delta(b) = 1$ if b is true, else $\delta(b) = 1$</p>
+</li>
+<li>由于$&gt;_u$的性质，上式继续化简为：<script type="math/tex; mode=display">\prod_{u\in U}p(>_u |\Theta ) = \prod_{(u,i,j)\in D_S} p(i >_u j |\Theta )</script></li>
+<li>为了满足前面提到的属性，我们定义：<script type="math/tex; mode=display">p(>_u |\Theta ):= \sigma (\hat{x}_{uij}(\Theta ))</script>  其中$\sigma$为sigmoid函数:$\sigma (x) := \frac{1}{1+e^{-x}}$，$\hat{x}_{uij}(\Theta )$为关于$\Theta$任意的用来衡量u，i，j关系的实值函数。（$\hat{x}_{uij}(\Theta )$交给具体的算法（MF/KNN），本文模型专注于对个性化的排序建模）</li>
+<li>下面只考虑似然函数。为了完成贝叶斯模型，我们假设先验概率为正态分布（均值0，方差-协方差矩阵$\Sigma_{\Theta}$）</li>
+<li>假设$\Sigma_{\Theta} = \Lambda_{\Theta} I$，BPR-OPT推导如下：<script type="math/tex; mode=display">\begin{align}
+  BPR-OPT & := ln p(\Theta | >_u) \\
+  & =ln p(>_u|\Theta )p(\Theta ) \\
+  & =ln \prod_{(u,i,j)\in D_S} \sigma (\hat{x}_{uij}) \\
+  & =\sum_{(u,i,j)\in D_S} ln \sigma (\hat{x}_{uij}) + ln p(\Theta ) \\
+  & =\sum_{(u,i,j)\in D_S} ln \sigma (\hat{x}_{uij}) - \Lambda_{\Theta} I \lVert x \rVert^2
+  \end{align}</script>  其中，$\Lambda_{\Theta}$为模型的正则化参数</li>
+</ul>
+<h4 id="与AUC优化的比较分析"><a href="#与AUC优化的比较分析" class="headerlink" title="与AUC优化的比较分析"></a>与AUC优化的比较分析</h4><p>数学公式形式相似，AUC用的是不可导的二值函数，本文用的是可导的$ln \sigma(x)$</p>
+<h3 id="BPR学习算法"><a href="#BPR学习算法" class="headerlink" title="BPR学习算法"></a>BPR学习算法</h3><p>基于bootstrap采样的随机梯度下降算法</p>
+<ul>
+<li><p>BPR-OPT对$\Theta$求导。得：</p>
+<script type="math/tex; mode=display">d = \sum_{(u,i,j)\in D_S} \frac{-e^{-\hat{x}_{uij}}}{1+e^{-\hat{x}_{uij}}} \frac{ \partial }{\partial \Theta} \hat{x}_{uij} - \Lambda_{\Theta} \Theta</script></li>
+<li><p>更新公式：</p>
+<script type="math/tex; mode=display">\Theta = \Theta + \alpha d</script></li>
+<li><p>随机选择$<u,i,j>$三元组进行训练，bootstrap采样。</u,i,j></p>
+</li>
+</ul>
+<h3 id="使用BPR训练模型"><a href="#使用BPR训练模型" class="headerlink" title="使用BPR训练模型"></a>使用BPR训练模型</h3><ul>
+<li>定义$\hat{x}_{uij} = \hat{x}_{ui} - \hat{x}_{uj}$</li>
+</ul>
+<h4 id="MF"><a href="#MF" class="headerlink" title="MF"></a>MF</h4><ul>
+<li>$\Theta = (U, I)$</li>
+<li><p>为了应用论文的模型，需要求出$\hat{x}_{uij}$对$\theta$的偏导，如下：</p>
+<script type="math/tex; mode=display">\frac{ \partial }{\partial \Theta} \hat{x}_{uij} = \begin{cases}
+  (I_{if}-I_{jf}), if \theta=U_{uf} \\
+  U_{uf}, if \theta=I_{if} \\
+  -U_{uf}, if \theta=I_{jf} \\
+  0, else
+  \end{cases}</script></li>
+<li><p>三个正则项：用户特征向量$\Lambda_U$，物品特征向量$\Lambda_{I^+}$（积极）和$\Lambda_{I^+}$（消极）</p>
+</li>
+</ul>
+<h4 id="自适应KNN"><a href="#自适应KNN" class="headerlink" title="自适应KNN"></a>自适应KNN</h4><ul>
+<li><p>$\hat{x}_{ui}=\sum_{l \in I_u^+ \land l\ne i}c_{il}$ （C为相似度矩阵）</p>
+</li>
+<li><p>$\Theta = C$</p>
+</li>
+<li><p>为了应用论文的模型，需要求出$\hat{x}_{uij}$对$\theta$的偏导，如下：</p>
+<script type="math/tex; mode=display">\frac{ \partial }{\partial \Theta} \hat{x}_{uij} = \begin{cases}
+  1, if \theta \in \{ c_{il}, c_{li}\} \land l \in I_u^+ \land l\ne i \\
+  -1, if \theta \in \{ c_{jl}, c_{lj}\} \land l \in I_u^+ \land l\ne j \\
+  0, else
+  \end{cases}</script></li>
+<li><p>两个正则项，更新$c_{il}$时的$\lambda_+$和更新$c_{jl}$时的$\lambda_-$</p>
+</li>
+</ul>
+<h2 id="和另外两个模型的关系"><a href="#和另外两个模型的关系" class="headerlink" title="和另外两个模型的关系"></a>和另外两个模型的关系</h2><h3 id="WRMF"><a href="#WRMF" class="headerlink" title="WRMF"></a>WRMF</h3><ul>
+<li>WR-MF方法用SVD最小化MSE,并且对是否偏好加上置信度，但只对一个物品应用。是最小二乘法方法（相当于最大似然估计应用于正态分布的随机变量）</li>
+<li>本文方法针对两个物品进行比较。物品排名是一个分类问题而不是回归问题，所以用logistic方法更加恰当。</li>
+<li>本文方法比WR-MF更快。</li>
+</ul>
+<h3 id="MMMF"><a href="#MMMF" class="headerlink" title="MMMF"></a>MMMF</h3><ul>
+<li>损失函数不同</li>
+<li>本文方法更通用</li>
+<li>本文方法能处理隐式反馈更稠密的矩阵（bootstrap抽样）。MMMF是对显式反馈提出的，可以用到隐式反馈数据集上，但会使矩阵稠密化。</li>
+</ul>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><ul>
+<li>对两种模型MF和KNN使用不同的优化方法来比较，以及非个性化推荐作为基线</li>
+<li>两个数据集：<ol>
+<li>Rossmann dataset 来自在线商店</li>
+<li>Netfix</li>
+</ol>
+</li>
+<li>评估指标：AUC</li>
+<li>实验结果：<img src="/2018/04/04/BPR论文阅读笔记/实验结果.png" alt="实验结果"></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/REC/" rel="tag"># REC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/29/Explicit-Matrix-Factorization-with-ALS-and-SGD/" rel="next" title="Explicit Matrix Factorization with ALS and SGD">
+                <i class="fa fa-chevron-left"></i> Explicit Matrix Factorization with ALS and SGD
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="lhy" />
+          <p class="site-author-name" itemprop="name">lhy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/chamlhy" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#BPR-Bayesian-Personalized-Ranking-from-Implicit-Feedback"><span class="nav-number">1.</span> <span class="nav-text">BPR: Bayesian Personalized Ranking from Implicit Feedback</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要贡献"><span class="nav-number">1.1.</span> <span class="nav-text">主要贡献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个性化推荐"><span class="nav-number">1.2.</span> <span class="nav-text">个性化推荐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BPR"><span class="nav-number">1.3.</span> <span class="nav-text">BPR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BPR-OPT"><span class="nav-number">1.3.1.</span> <span class="nav-text">BPR-OPT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#与AUC优化的比较分析"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">与AUC优化的比较分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BPR学习算法"><span class="nav-number">1.3.2.</span> <span class="nav-text">BPR学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用BPR训练模型"><span class="nav-number">1.3.3.</span> <span class="nav-text">使用BPR训练模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MF"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">MF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自适应KNN"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">自适应KNN</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和另外两个模型的关系"><span class="nav-number">1.4.</span> <span class="nav-text">和另外两个模型的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WRMF"><span class="nav-number">1.4.1.</span> <span class="nav-text">WRMF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MMMF"><span class="nav-number">1.4.2.</span> <span class="nav-text">MMMF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评估"><span class="nav-number">1.5.</span> <span class="nav-text">评估</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lhy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
