@@ -104,7 +104,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/性质.PNG">
 <meta property="og:image" content="http://yoursite.com/2018/04/04/BPR论文阅读笔记/实验结果.PNG">
-<meta property="og:updated_time" content="2018-04-04T13:46:39.068Z">
+<meta property="og:updated_time" content="2018-04-13T01:50:56.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BPR论文阅读笔记">
 <meta name="twitter:description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
@@ -353,10 +353,10 @@
 <li><p>目标：对每一个物品i最大化</p>
 <script type="math/tex; mode=display">p(\Theta | >_u) \propto p(>_u|\Theta )p(\Theta )</script><p>  其中，$\Theta$是任意模型的参数向量，$&gt;_u$是u的期望但潜在的偏好结构</p>
 </li>
-<li><p>假设：每一个用户的每一对物品对$<i,j>$的排序相对其他对都是独立的。</i,j></p>
+<li><p>假设：每一个用户的每一对物品对$(i,j)$的排序相对其他对都是独立的。</p>
 </li>
 <li><p>基于以上假设化简式子，对于所有的u有：</p>
-<script type="math/tex; mode=display">\prod_{u\in U}p(>_u | \Theta ) = \prod_{(u,i,j)\in UxIxI} p(i >_u j |\Theta )^{\delta((u,i,j)\in D_S)}*(1-p(i >_u j |\Theta ))^{\delta((u,i,j)\notin D_S)}</script><p>  其中，$\delta(b) = 1$ if b is true, else $\delta(b) = 1$</p>
+<script type="math/tex; mode=display">\prod_{u\in U}p(>_u | \Theta ) = \prod_{(u,i,j)\in UxIxI} p(i >_u j |\Theta )^{\delta((u,i,j)\in D_S)}*(1-p(i >_u j |\Theta ))^{\delta((u,i,j)\notin D_S)}</script><p>  其中，$\delta(b) = 1$ if b is true, else $\delta(b) = 0$</p>
 </li>
 <li>由于$&gt;_u$的性质，上式继续化简为：<script type="math/tex; mode=display">\prod_{u\in U}p(>_u |\Theta ) = \prod_{(u,i,j)\in D_S} p(i >_u j |\Theta )</script></li>
 <li>为了满足前面提到的属性，我们定义：<script type="math/tex; mode=display">p(>_u |\Theta ):= \sigma (\hat{x}_{uij}(\Theta ))</script>  其中$\sigma$为sigmoid函数:$\sigma (x) := \frac{1}{1+e^{-x}}$，$\hat{x}_{uij}(\Theta )$为关于$\Theta$任意的用来衡量u，i，j关系的实值函数。（$\hat{x}_{uij}(\Theta )$交给具体的算法（MF/KNN），本文模型专注于对个性化的排序建模）</li>
@@ -364,9 +364,9 @@
 <li>假设$\Sigma_{\Theta} = \Lambda_{\Theta} I$，BPR-OPT推导如下：<script type="math/tex; mode=display">\begin{align}
   BPR-OPT & := ln p(\Theta | >_u) \\
   & =ln p(>_u|\Theta )p(\Theta ) \\
-  & =ln \prod_{(u,i,j)\in D_S} \sigma (\hat{x}_{uij}) \\
+  & =ln \prod_{(u,i,j)\in D_S} \sigma (\hat{x}_{uij})p(\Theta) \\
   & =\sum_{(u,i,j)\in D_S} ln \sigma (\hat{x}_{uij}) + ln p(\Theta ) \\
-  & =\sum_{(u,i,j)\in D_S} ln \sigma (\hat{x}_{uij}) - \Lambda_{\Theta} I \lVert x \rVert^2
+  & =\sum_{(u,i,j)\in D_S} ln \sigma (\hat{x}_{uij}) - \Lambda_{\Theta} I \lVert \Theta \rVert^2
   \end{align}</script>  其中，$\Lambda_{\Theta}$为模型的正则化参数</li>
 </ul>
 <h4 id="与AUC优化的比较分析"><a href="#与AUC优化的比较分析" class="headerlink" title="与AUC优化的比较分析"></a>与AUC优化的比较分析</h4><p>数学公式形式相似，AUC用的是不可导的二值函数，本文用的是可导的$ln \sigma(x)$</p>
@@ -376,7 +376,7 @@
 <script type="math/tex; mode=display">d = \sum_{(u,i,j)\in D_S} \frac{-e^{-\hat{x}_{uij}}}{1+e^{-\hat{x}_{uij}}} \frac{ \partial }{\partial \Theta} \hat{x}_{uij} - \Lambda_{\Theta} \Theta</script></li>
 <li><p>更新公式：</p>
 <script type="math/tex; mode=display">\Theta = \Theta + \alpha d</script></li>
-<li><p>随机选择$<u,i,j>$三元组进行训练，bootstrap采样。</u,i,j></p>
+<li><p>随机选择$(u,i,j)$三元组进行训练，bootstrap采样。</p>
 </li>
 </ul>
 <h3 id="使用BPR训练模型"><a href="#使用BPR训练模型" class="headerlink" title="使用BPR训练模型"></a>使用BPR训练模型</h3><ul>
@@ -386,10 +386,10 @@
 <li>$\Theta = (U, I)$</li>
 <li><p>为了应用论文的模型，需要求出$\hat{x}_{uij}$对$\theta$的偏导，如下：</p>
 <script type="math/tex; mode=display">\frac{ \partial }{\partial \Theta} \hat{x}_{uij} = \begin{cases}
-  (I_{if}-I_{jf}), if \theta=U_{uf} \\
-  U_{uf}, if \theta=I_{if} \\
-  -U_{uf}, if \theta=I_{jf} \\
-  0, else
+  (I_{if}-I_{jf}),  &  if   \theta=U_{uf} \\
+  U_{uf},  &   if   \theta=I_{if} \\
+  -U_{uf},   &  if   \theta=I_{jf} \\
+  0,  &   else
   \end{cases}</script></li>
 <li><p>三个正则项：用户特征向量$\Lambda_U$，物品特征向量$\Lambda_{I^+}$（积极）和$\Lambda_{I^+}$（消极）</p>
 </li>
@@ -401,9 +401,9 @@
 </li>
 <li><p>为了应用论文的模型，需要求出$\hat{x}_{uij}$对$\theta$的偏导，如下：</p>
 <script type="math/tex; mode=display">\frac{ \partial }{\partial \Theta} \hat{x}_{uij} = \begin{cases}
-  1, if \theta \in \{ c_{il}, c_{li}\} \land l \in I_u^+ \land l\ne i \\
-  -1, if \theta \in \{ c_{jl}, c_{lj}\} \land l \in I_u^+ \land l\ne j \\
-  0, else
+  1,  &   if   \theta \in \{ c_{il}, c_{li}\} \land l \in I_u^+ \land l\ne i \\
+  -1,   &  if   \theta \in \{ c_{jl}, c_{lj}\} \land l \in I_u^+ \land l\ne j \\
+  0,  &   else
   \end{cases}</script></li>
 <li><p>两个正则项，更新$c_{il}$时的$\lambda_+$和更新$c_{jl}$时的$\lambda_-$</p>
 </li>
