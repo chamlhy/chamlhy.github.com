@@ -98,16 +98,16 @@
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Naive_Bayes">
-<meta property="og:url" content="http://yoursite.com/2018/03/19/Naive-Bayes/index.html">
+<meta property="og:url" content="http://yoursite.com/post/443aed37.html">
 <meta property="og:site_name" content="Think Island">
 <meta property="og:description" content="12345import numpy as npimport reimport randomfrom collections import defaultdictimport matplotlib.pyplot as plt 贝叶斯公式P(A|B) = \frac{P(B|A)P(A)}{P(B)}贝叶斯模型是通过贝叶斯公式去计算某个样本在不同类别条件下的条件概率并取具有最大条件概率的那个类型作为分">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/03/19/Naive-Bayes/output_11_0.png">
+<meta property="og:image" content="http://yoursite.com/post/Naive-Bayes/output_11_0.png">
 <meta property="og:updated_time" content="2018-03-19T09:15:36.919Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Naive_Bayes">
 <meta name="twitter:description" content="12345import numpy as npimport reimport randomfrom collections import defaultdictimport matplotlib.pyplot as plt 贝叶斯公式P(A|B) = \frac{P(B|A)P(A)}{P(B)}贝叶斯模型是通过贝叶斯公式去计算某个样本在不同类别条件下的条件概率并取具有最大条件概率的那个类型作为分">
-<meta name="twitter:image" content="http://yoursite.com/2018/03/19/Naive-Bayes/output_11_0.png">
+<meta name="twitter:image" content="http://yoursite.com/post/Naive-Bayes/output_11_0.png">
 
 
 
@@ -136,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/19/Naive-Bayes/"/>
+  <link rel="canonical" href="http://yoursite.com/post/443aed37.html"/>
 
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/19/Naive-Bayes/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/post/443aed37.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lhy">
@@ -398,7 +398,7 @@ predict ham -- actual spam
 error rate : 0.030303030303030304
 k - error rate : 0.020454545454545454
 </code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#展示一下概率分布</span></span><br><span class="line">cond_probs, cls_probs = train([get_doc_vect(words,vocabulary) <span class="keyword">for</span> words <span class="keyword">in</span> word_vects],classes)</span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line"><span class="keyword">for</span> cls, probs <span class="keyword">in</span> cond_probs.items():</span><br><span class="line">    ax.scatter(np.arange(<span class="number">0</span>, len(probs)),</span><br><span class="line">               probs*cls_probs[cls],</span><br><span class="line">               label=cls,</span><br><span class="line">               alpha=<span class="number">0.3</span>)</span><br><span class="line">    ax.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/03/19/Naive-Bayes/output_11_0.png" alt="png"></p>
+<p><img src="/post/Naive-Bayes/output_11_0.png" alt="png"></p>
 
       
     </div>
@@ -429,7 +429,7 @@ k - error rate : 0.020454545454545454
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/18/User-based-CF/" rel="next" title="User-based CF">
+              <a href="/post/430d22dd.html" rel="next" title="User-based CF">
                 <i class="fa fa-chevron-left"></i> User-based CF
               </a>
             
@@ -439,7 +439,7 @@ k - error rate : 0.020454545454545454
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/23/Logistic-Regression/" rel="prev" title="Logistic Regression">
+              <a href="/post/ff80a634.html" rel="prev" title="Logistic Regression">
                 Logistic Regression <i class="fa fa-chevron-right"></i>
               </a>
             
