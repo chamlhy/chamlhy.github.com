@@ -102,13 +102,13 @@
 <meta property="og:site_name" content="Think Island">
 <meta property="og:description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/post/BPR论文阅读笔记/性质.PNG">
-<meta property="og:image" content="http://yoursite.com/post/BPR论文阅读笔记/实验结果.PNG">
-<meta property="og:updated_time" content="2018-04-27T11:40:21.423Z">
+<meta property="og:image" content="http://yoursite.com/post/2481b051.PNG">
+<meta property="og:image" content="http://yoursite.com/post/2481b051/实验结果.PNG">
+<meta property="og:updated_time" content="2018-04-27T12:07:31.146Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BPR论文阅读笔记">
 <meta name="twitter:description" content="BPR: Bayesian Personalized Ranking from Implicit Feedback论文地址 主要贡献 提出通用的优化标准BPR-OPT。从最佳个性化排名的最大后验估计中发展而来。 为最大化BPR-OPT，提出基于SGD和bootstrap采样的通用学习算法LEARNBPR。 展示如何应用LEARNBPR到matrix factorization和adaptive k">
-<meta name="twitter:image" content="http://yoursite.com/post/BPR论文阅读笔记/性质.PNG">
+<meta name="twitter:image" content="http://yoursite.com/post/2481b051.PNG">
 
 
 
@@ -342,7 +342,7 @@
 </ul>
 <a id="more"></a>
 <h2 id="个性化推荐"><a href="#个性化推荐" class="headerlink" title="个性化推荐"></a>个性化推荐</h2><p>论文的方法考虑一对物品i和j，如果用户u看了i没有看j，则在用户u的偏爱程度上i&gt;j，但若用户同时看了i和j，或同时没有看i和j，则用户u对i和j的偏爱程度无法区分。</p>
-<p>定义符号$&gt;_u$，代表u的期望但潜在的偏好结构，有如下性质：<br><img src="/post/BPR论文阅读笔记/性质.PNG" alt="性质"></p>
+<p>定义符号$&gt;_u$，代表u的期望但潜在的偏好结构，有如下性质：<br><img src="/post/2481b051.PNG" alt="性质"></p>
 <p>于是训练数据$D_S$是UxIxI的规模。</p>
 <script type="math/tex; mode=display">D_S:=\{(u,i,j)|i \in I_u^+ \land j \in I - I_u^+ \}</script><p>这个有两个优点：</p>
 <ul>
@@ -426,7 +426,7 @@
 </ol>
 </li>
 <li>评估指标：AUC</li>
-<li>实验结果：<img src="/post/BPR论文阅读笔记/实验结果.PNG" alt="实验结果"></li>
+<li>实验结果：<img src="/post/2481b051/实验结果.PNG" alt="实验结果"></li>
 </ul>
 
       
