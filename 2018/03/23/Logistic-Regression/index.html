@@ -436,6 +436,11 @@ error rate : 0.03787878787878788
           
   <div class="comments" id="comments">
     
+       
+         <div onclick="ShowGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+         <div id="gitment-container" style="display:none"></div>
+       
+    
   </div>
 
 
@@ -700,6 +705,31 @@ error rate : 0.03787878787878788
 
 
 
+
+
+   
+   
+   
+   
+   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+   
+       <script type="text/javascript">
+           function ShowGitment(){
+               document.getElementById("gitment-display-button").style.display = "none";
+               document.getElementById("gitment-container").style.display = "block";
+               var gitment = new Gitment({
+                   id: window.location.pathname, 
+                   owner: 'chamlhy',
+                   repo: 'lhy9comment',
+                   oauth: {
+                       client_id: '096b3c7f63f33ed0967b',
+                       client_secret: '8c475778ba49e97751f8c7d0a982e9459b684010',
+                   }});
+               gitment.render('gitment-container');
+           }
+       </script>
+   
 
 
   
