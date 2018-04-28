@@ -103,7 +103,7 @@
 <meta property="og:description" content="一篇Netflix在MLSS 2014上的talk，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。  看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/post/7afcc1e2/index.png">
-<meta property="og:updated_time" content="2018-04-28T09:25:16.567Z">
+<meta property="og:updated_time" content="2018-04-28T09:26:22.981Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLSS&#39;14 Netflix关于推荐系统的talk阅读笔记">
 <meta name="twitter:description" content="一篇Netflix在MLSS 2014上的talk，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。  看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。">
@@ -434,12 +434,13 @@
 <li><p>在推荐中，三维张量为F=users x item x context，Tucker分解为S(core)、M、U、C。目标函数:R[U,M,C,S] := L(F,Y)+各元素F范数的平方。（Frobenius范数，即矩阵元素绝对值的平方和再开平方。 L(F,Y)为各user和item元素预测（平方/绝对值）误差的和）。使用GD方法迭代。</p>
 </li>
 </ul>
-<h4 id="Factorization-Machines因子机"><a href="#Factorization-Machines因子机" class="headerlink" title="Factorization Machines因子机"></a>Factorization Machines因子机</h4><p>比TF表现更好。</p>
+<h4 id="Factorization-Machines因子机"><a href="#Factorization-Machines因子机" class="headerlink" title="Factorization Machines因子机"></a>Factorization Machines因子机</h4><p>比TF表现更好。<br>之后拓展</p>
 <ul>
 <li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=5694074" target="_blank" rel="noopener">Factorization Machines</a></li>
 <li><a href="https://dl.acm.org/ft_gateway.cfm?id=2168771&amp;ftid=1243298&amp;dwn=1&amp;CFID=29268173&amp;CFTOKEN=44ed12d4c1061977-31CCF083-C184-DE09-3E2E2B439ED247F0" target="_blank" rel="noopener">Factorization Machines with libFM</a></li>
 </ul>
-<h3 id="Deep-Learning"><a href="#Deep-Learning" class="headerlink" title="Deep Learning"></a>Deep Learning</h3><h3 id="Similarity相似性"><a href="#Similarity相似性" class="headerlink" title="Similarity相似性"></a>Similarity相似性</h3><ul>
+<h3 id="Deep-Learning"><a href="#Deep-Learning" class="headerlink" title="Deep Learning"></a>Deep Learning</h3><p>之后拓展</p>
+<h3 id="Similarity相似性"><a href="#Similarity相似性" class="headerlink" title="Similarity相似性"></a>Similarity相似性</h3><ul>
 <li>很多方面：元数据/标签/用户行为（观看、玩、打分）</li>
 <li>对每一个方面进行学习然后ensemble</li>
 <li><p>基于图的行相似性<br>  SimRank: 如果两个对象被类似对象引用，则它们是相似的。</p>
