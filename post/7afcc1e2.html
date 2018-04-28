@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="REC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="一篇Netflix在MLSS 2014上的talk，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。  看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。">
+<meta name="keywords" content="REC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MLSS&#39;14 Netflix关于推荐系统的talk阅读笔记">
+<meta property="og:url" content="http://yoursite.com/post/7afcc1e2.html">
+<meta property="og:site_name" content="Think Island">
+<meta property="og:description" content="一篇Netflix在MLSS 2014上的talk，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。  看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/post/7afcc1e2/index.png">
+<meta property="og:updated_time" content="2018-04-28T09:25:16.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MLSS&#39;14 Netflix关于推荐系统的talk阅读笔记">
+<meta name="twitter:description" content="一篇Netflix在MLSS 2014上的talk，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。  看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。">
+<meta name="twitter:image" content="http://yoursite.com/post/7afcc1e2/index.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/post/7afcc1e2.html"/>
+
+
+
+
+
+  <title>MLSS'14 Netflix关于推荐系统的talk阅读笔记 | Think Island</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Think Island</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/post/7afcc1e2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lhy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Think Island">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MLSS'14 Netflix关于推荐系统的talk阅读笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T17:14:40+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>一篇Netflix在MLSS 2014上的<a href="https://pan.baidu.com/s/1sj0Puod" target="_blank" rel="noopener">talk</a>，粗略做了一下总结，主要是关于推荐系统的综述知识和一些实际应用例子。虽然有些过时（2014年），但精髓还在。</p>
+</blockquote>
+<p>看一下目录吧，我主要关注在2、3、4三个部分，也就是推荐方法这一块。<br><a id="more"></a><br><img src="/post/7afcc1e2/index.png" alt="目录"></p>
+<h3 id="CF"><a href="#CF" class="headerlink" title="CF"></a>CF</h3><h4 id="kNN-CF的问题"><a href="#kNN-CF的问题" class="headerlink" title="kNN-CF的问题"></a>kNN-CF的问题</h4><ul>
+<li>稀疏性问题：矩阵很大，非零元素很少<br>  降维方法：<ul>
+<li>MF</li>
+<li>聚类</li>
+<li>PCA</li>
+</ul>
+</li>
+<li>可扩展性问题：计算量同时随着用户数和物品数增加，用户/物品量非常大，O(m+n)<br>  聚类方法可能会有帮助</li>
+</ul>
+<h4 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h4><ul>
+<li>user-based CF的用户相似度是动态的，预先计算会导致很差的结果。</li>
+<li>item-based CF的物品相速度是静态的，可以预先计算</li>
+</ul>
+<h4 id="Model-Based-CF"><a href="#Model-Based-CF" class="headerlink" title="Model-Based CF"></a>Model-Based CF</h4><ul>
+<li><p>Model：<br>  概率（贝叶斯网络）<br>  聚类（聚类用户，基于用户组推荐）<br>  基于规则（关联规则：物品与物品的共同购买行为矩阵）<br>  分类<br>  回归<br>  LDA</p>
+</li>
+<li><p>SVD++和RBMS（限制玻尔兹曼机器）</p>
+</li>
+<li>LSH局部敏感哈希： 物品高维聚类，主要用在NN</li>
+</ul>
+<h4 id="CF的问题"><a href="#CF的问题" class="headerlink" title="CF的问题"></a>CF的问题</h4><ul>
+<li>冷启动（新用户/新物品）</li>
+<li>流行偏差</li>
+</ul>
+<h3 id="CB"><a href="#CB" class="headerlink" title="CB"></a>CB</h3><ul>
+<li>推荐建立在单独用户购买的物品的内容上</li>
+<li>物品内容：显性的属性/特点，文本内容（文本相似度/NLP挖掘特征），物品类型</li>
+<li>用于推荐基于文本的物品/用户模型多种技术分类</li>
+</ul>
+<h4 id="CB优点"><a href="#CB优点" class="headerlink" title="CB优点"></a>CB优点</h4><ul>
+<li>没有冷启动/稀疏性问题</li>
+<li>个性化/全面</li>
+<li>可解释</li>
+</ul>
+<h4 id="CB问题"><a href="#CB问题" class="headerlink" title="CB问题"></a>CB问题</h4><ul>
+<li>需要有意义的特征/有些物品很难找/特征很难找</li>
+<li>用户的兴趣要可学习</li>
+<li>难以与其他用户联动</li>
+<li>过拟合</li>
+<li>偶然性</li>
+</ul>
+<h3 id="Ranking"><a href="#Ranking" class="headerlink" title="Ranking"></a>Ranking</h3><p>基于排序学习的推荐</p>
+<ul>
+<li>从训练数据构建排名模型</li>
+<li>训练数据为偏序或二值化的数据</li>
+<li>从得分得到排序结果</li>
+<li>个性化的关键</li>
+<li>可以作为一个典型的监督学习问题</li>
+</ul>
+<h4 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h4><ul>
+<li>NDCG\MRR\FCP</li>
+<li>问题：不可导，无法优化模型</li>
+<li>最近研究点在可以直接优化模型的指标</li>
+</ul>
+<h4 id="途径"><a href="#途径" class="headerlink" title="途径"></a>途径</h4><ul>
+<li>Pointwise：单独点的相关性判断，Ordinal regression, Logistic regression, SVM, GBDT, …</li>
+<li>Pairwise：一对点的次序判断，最小化错误次序的数量，二分类问题，RankSVM, RankBoost, RankNet, FRank…</li>
+<li>Listwise：<ul>
+<li>使用间接损失函数：RankCosine、ListNet 对间接损失函数的优化不一定是对IR模型的优化</li>
+<li>直接优化（不可导时会比较困难）。Genetic Programming遗传编码、Simulated Annealing模拟退火、对目标函数进行平滑化后的GD（ CLiMF、TFMAP）、把MAP加入SVM约束（SVM-MAP）、使用 boosting 优化 NDCG（AdaRank）</li>
+</ul>
+</li>
+</ul>
+<h3 id="上下文感知Context-aware"><a href="#上下文感知Context-aware" class="headerlink" title="上下文感知Context-aware"></a>上下文感知Context-aware</h3><p>三种途径：pre-filtering/post-filtering/modeling</p>
+<h4 id="pre-filtering"><a href="#pre-filtering" class="headerlink" title="pre-filtering"></a>pre-filtering</h4><ul>
+<li>使用上下文选择最相关的数据交给推荐系统</li>
+<li>可能导致结果太狭隘、有些情况下上下文的选择没有意义、过滤太多数据导致稀疏性问题</li>
+<li>总结：<ul>
+<li>多种途径</li>
+<li>将具体的条件回滚到更高等级</li>
+<li>使用隐变量方法降维（MF、LDA…）</li>
+</ul>
+</li>
+</ul>
+<h4 id="Post-filtering"><a href="#Post-filtering" class="headerlink" title="Post-filtering"></a>Post-filtering</h4><ul>
+<li>在最后输出结果时使用上下文信息过滤和排序</li>
+<li>使用相似性过滤 or 使用社会/协同上下文表现。。。</li>
+</ul>
+<h4 id="Modeling"><a href="#Modeling" class="headerlink" title="Modeling"></a>Modeling</h4><ul>
+<li>多维推荐模型</li>
+<li>扩充特征的维度，使得R:UxIxD_1xD_2x…xD_n，比如电影推荐的维度：用户、电影、时间、公司、地点等</li>
+</ul>
+<h4 id="Tensor-Factorization张量分解"><a href="#Tensor-Factorization张量分解" class="headerlink" title="Tensor Factorization张量分解"></a>Tensor Factorization张量分解</h4><ul>
+<li>三维数组以及多位数组，我们称之为张量（tensor）</li>
+<li><a href="https://epubs.siam.org/doi/pdf/10.1137/07070111X" target="_blank" rel="noopener">Tensor Decompositions and Applications</a></li>
+<li>CP分解<br>  如果n阶张量可以被写成n个向量的外积，则此张量为一个秩一张量。<br>  三维为例：分成R个三个一维向量（a_r, b_r, c_r）的乘积。三个方向的向量组成的矩阵称为因子矩阵A,B,C。<script type="math/tex; mode=display">\chi \approx \sum_{r=1}^{R} a_r \circ b_r \circ c_r</script>  $\circ$表示向量的外积。即：<script type="math/tex; mode=display">x_{ijk} \approx \sum_{r=1}^{R} a_{ir} b_{jr} c_{kr} for i=1,2,...,I, j=1,2,...,J, k=1,2,...,K</script>  一个三阶张量的CP分解可以写成展开形式 ：<script type="math/tex; mode=display">X_{(1)} \approx A(C \odot  B)^T</script><script type="math/tex; mode=display">X_{(2)} \approx B(C \odot  A)^T</script><script type="math/tex; mode=display">X_{(3)} \approx C(B \odot  A)^T</script>   求解方法与MF类似，可用ALS等</li>
+<li><p>Tucker分解<br>  一种高阶的主成分分析，它将一个张量表示成一个核心（core）张量沿每一个mode乘上一个矩阵</p>
+<script type="math/tex; mode=display">\chi \approx G \times_1 A \times_2 B \times_3 C = \sum_{p=1}^    P \sum_{q=1}^Q \sum_{r-1}^R g_{pqr} a_p \circ b_q \circ c_r = \llbracket  G; A,B,C \rrbracket</script><script type="math/tex; mode=display">X_{(1)} \approx AG_{(1)}(C \otimes  B)^T</script><script type="math/tex; mode=display">X_{(2)} \approx BG_{(2)}(C \otimes  A)^T</script><script type="math/tex; mode=display">X_{(3)} \approx CG_{(3)}(B \otimes  A)^T</script><p>  可拓展为n维张量：</p>
+<script type="math/tex; mode=display">\chi \approx G \times_1 A^{(1)} \times_2 A^{(2)} ... \times_n A^{(n)} = \llbracket  G; A^{(1)},A^{(2)},...,A^{(n)} \rrbracket</script><p>  CP分解是Tucker分解的一种特殊形式：如果核心张量是对角的，且P=Q=R，则Tucker分解就退化成了CP分解。</p>
+<ul>
+<li>计算方法：<br>  HOSVD：利用SVD对每个mode做一次Tucker1分解（截断或者不截断）。HOSVD不能保证得到一个较好的近似，但HOSVD的结果可以作为一个其他迭代算法（如HOOI）的很好的初始解。</li>
+</ul>
+</li>
+<li><p><a href="https://arxiv.org/pdf/1501.07320.pdf" target="_blank" rel="noopener">Tensor Factorization via Matrix Factorization</a></p>
+</li>
+<li><p>在推荐中，三维张量为F=users x item x context，Tucker分解为S(core)、M、U、C。目标函数:R[U,M,C,S] := L(F,Y)+各元素F范数的平方。（Frobenius范数，即矩阵元素绝对值的平方和再开平方。 L(F,Y)为各user和item元素预测（平方/绝对值）误差的和）。使用GD方法迭代。</p>
+</li>
+</ul>
+<h4 id="Factorization-Machines因子机"><a href="#Factorization-Machines因子机" class="headerlink" title="Factorization Machines因子机"></a>Factorization Machines因子机</h4><p>比TF表现更好。</p>
+<ul>
+<li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=5694074" target="_blank" rel="noopener">Factorization Machines</a></li>
+<li><a href="https://dl.acm.org/ft_gateway.cfm?id=2168771&amp;ftid=1243298&amp;dwn=1&amp;CFID=29268173&amp;CFTOKEN=44ed12d4c1061977-31CCF083-C184-DE09-3E2E2B439ED247F0" target="_blank" rel="noopener">Factorization Machines with libFM</a></li>
+</ul>
+<h3 id="Deep-Learning"><a href="#Deep-Learning" class="headerlink" title="Deep Learning"></a>Deep Learning</h3><h3 id="Similarity相似性"><a href="#Similarity相似性" class="headerlink" title="Similarity相似性"></a>Similarity相似性</h3><ul>
+<li>很多方面：元数据/标签/用户行为（观看、玩、打分）</li>
+<li>对每一个方面进行学习然后ensemble</li>
+<li><p>基于图的行相似性<br>  SimRank: 如果两个对象被类似对象引用，则它们是相似的。</p>
+</li>
+<li><p>相似性ensemble：</p>
+<ul>
+<li>学出各个方面相似性的分数</li>
+<li>组合起来：通过已有回应经过回归学习到的权重/其他MAB探索途径</li>
+<li>最终对用户投票的相似性做出回应</li>
+</ul>
+</li>
+</ul>
+<h3 id="Social-Recommendations"><a href="#Social-Recommendations" class="headerlink" title="Social Recommendations"></a>Social Recommendations</h3><ul>
+<li><p>基于社交网络和<strong>信任机制</strong>的推荐</p>
+<ul>
+<li>并非在社交网络中亲近的用户就是可信任的，信任很复杂，要考虑包括个人背景、互动历史、上下文、相似性、声誉等方面。在社会学定义中包括信念和承诺两个要素，类似于下注。在推荐系统中，信任度描述用户意见的相似度（忽视权威/正确性等）</li>
+<li>信任机制的任务是推算出一个个体对另一个个体的信任度。</li>
+<li>主要算法：Advogato/Appleseed/MoleTrust/TidalTrust</li>
+<li>建立方法：<ul>
+<li>为信任的用户给予更多权重</li>
+<li>CF：在相似性中加入或结合信任因素</li>
+<li>排序和过滤： 优先考虑来自可信来源的信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>其他方法：</p>
+<ul>
+<li>在CF中使用不同途径使用“朋友关系”（比如将用户相似度用社交关系替代）</li>
+<li>Demographic方法：根据个人属性对用户进行分类，并根据人口统计类别进行推荐。人口统计类别可以根据专家通过市场调查来决定，最终形成人与人的相关性形式。 分类的时候一般人口统计特征会被用到，还可以在已知一些用户分类的情况下使用这些用户的描述来分类其他用户。可以使用任何学习机制来进行学习。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hybrid-Approaches-混合方式"><a href="#Hybrid-Approaches-混合方式" class="headerlink" title="Hybrid Approaches 混合方式"></a>Hybrid Approaches 混合方式</h3><p>一般多推荐方法组合要比单一推荐方法效果好。推荐方法混合的方式有：</p>
+<ul>
+<li>Weighted加权：几种方法的输出（以分数或投票的形式）结合不同程度的重要性（权重）来提供最终的推荐结果。<ul>
+<li>将不同推荐技术的结果组合成一个推荐列表：分数线性加和或者结果投票</li>
+<li>建立在这样一个假设上：不同的方法在可能物品推荐空间内的相对取值是均匀的。这一假设在客观上并不一定成立，比如CF在面对评分数很少的物品时的推荐能力是很弱的。</li>
+</ul>
+</li>
+<li>Switching交换：系统根据情况选取不同的推荐方法，系统的关键点在要建立合适的选取方法的标准。可以一定程度上避免冷启动问题。</li>
+<li>Mixed混合：系统同时使用多种推荐方法给出结果，这些结果都会呈现在推荐列表中。可以解决新物品启动问题，在新用户启动问题上表现不好。</li>
+<li>Feature combination特征组合：不同来源的特征融合后提供给一个单一的方法使用。特征有不同的组合方法，比如：<ul>
+<li>将协同信息（用户和评分）作为与每个示例相关联的附加特征数据，并在该增强数据集上使用基于内容的推荐方法</li>
+<li>将内容特征视为CF的不同维度（比如将评分看作虚拟专业用户的评分）</li>
+</ul>
+</li>
+<li>Cascade级联：前一个方法（强）负责输出一个粗略的候选列表，后一个方法（弱）负责改善这一列表。级联方式允许系统在第一个方法已经产生了很好的物品推荐列表时不再使用第二种方法，但关键在于确定方法间有意义且固定的先后次序。</li>
+<li>Feature augmentation特征增强：使用一种方法从某个信息源中得到特征（分类/评分等），进而将得到的特征作为另一种推荐方法输入的一部分</li>
+<li>Meta-level元级/分层：使用一种技术来产生某类模型，进而将获得的模型作为下一种技术的输入。元级混合和特征补充的区别在于，前者是将模型作为输入，而后者是将特征作为下一种技术的输入。然而，并不是任何推荐方法都能够产生适合输入其他方法的模型。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/REC/" rel="tag"># REC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2481b051.html" rel="next" title="BPR论文阅读笔记">
+                <i class="fa fa-chevron-left"></i> BPR论文阅读笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+       
+         <div onclick="ShowGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+         <div id="gitment-container" style="display:none"></div>
+       
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="lhy" />
+          <p class="site-author-name" itemprop="name">lhy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/chamlhy" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CF"><span class="nav-number">1.</span> <span class="nav-text">CF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kNN-CF的问题"><span class="nav-number">1.1.</span> <span class="nav-text">kNN-CF的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能"><span class="nav-number">1.2.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Model-Based-CF"><span class="nav-number">1.3.</span> <span class="nav-text">Model-Based CF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CF的问题"><span class="nav-number">1.4.</span> <span class="nav-text">CF的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CB"><span class="nav-number">2.</span> <span class="nav-text">CB</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CB优点"><span class="nav-number">2.1.</span> <span class="nav-text">CB优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CB问题"><span class="nav-number">2.2.</span> <span class="nav-text">CB问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ranking"><span class="nav-number">3.</span> <span class="nav-text">Ranking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#指标"><span class="nav-number">3.1.</span> <span class="nav-text">指标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#途径"><span class="nav-number">3.2.</span> <span class="nav-text">途径</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文感知Context-aware"><span class="nav-number">4.</span> <span class="nav-text">上下文感知Context-aware</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pre-filtering"><span class="nav-number">4.1.</span> <span class="nav-text">pre-filtering</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Post-filtering"><span class="nav-number">4.2.</span> <span class="nav-text">Post-filtering</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Modeling"><span class="nav-number">4.3.</span> <span class="nav-text">Modeling</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tensor-Factorization张量分解"><span class="nav-number">4.4.</span> <span class="nav-text">Tensor Factorization张量分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Factorization-Machines因子机"><span class="nav-number">4.5.</span> <span class="nav-text">Factorization Machines因子机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deep-Learning"><span class="nav-number">5.</span> <span class="nav-text">Deep Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Similarity相似性"><span class="nav-number">6.</span> <span class="nav-text">Similarity相似性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Social-Recommendations"><span class="nav-number">7.</span> <span class="nav-text">Social Recommendations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hybrid-Approaches-混合方式"><span class="nav-number">8.</span> <span class="nav-text">Hybrid Approaches 混合方式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lhy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+   
+   
+   
+   
+   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+   
+       <script type="text/javascript">
+           function ShowGitment(){
+               document.getElementById("gitment-display-button").style.display = "none";
+               document.getElementById("gitment-container").style.display = "block";
+               var gitment = new Gitment({
+                   id: window.location.pathname, 
+                   owner: 'chamlhy',
+                   repo: 'lhy9comment',
+                   oauth: {
+                       client_id: '096b3c7f63f33ed0967b',
+                       client_secret: '8c475778ba49e97751f8c7d0a982e9459b684010',
+                   }});
+               gitment.render('gitment-container');
+           }
+       </script>
+   
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
