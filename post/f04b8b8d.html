@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="REC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="一些相关论文的记录  Understanding the Impact of Weather for POI Recommendations加入天气特征 温度，云量，湿度和降水强度等 实验： 对比未加入天气特征以及加入天气特征的同一种算法准确度 与使用时间变量的算法对比 度量每一种天气特征的影响程度">
+<meta name="keywords" content="REC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POI推荐中的天气因素及RNN相关论文">
+<meta property="og:url" content="http://yoursite.com/post/f04b8b8d.html">
+<meta property="og:site_name" content="Think Island">
+<meta property="og:description" content="一些相关论文的记录  Understanding the Impact of Weather for POI Recommendations加入天气特征 温度，云量，湿度和降水强度等 实验： 对比未加入天气特征以及加入天气特征的同一种算法准确度 与使用时间变量的算法对比 度量每一种天气特征的影响程度">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/post/f04b8b8d/PACE网络结构.PNG">
+<meta property="og:image" content="http://yoursite.com/post/f04b8b8d/STRNN学习方法.PNG">
+<meta property="og:image" content="http://yoursite.com/post/f04b8b8d/定制GRU结构图.PNG">
+<meta property="og:image" content="http://yoursite.com/post/f04b8b8d/GRU会话并行小批量.PNG">
+<meta property="og:updated_time" content="2018-05-15T02:20:37.493Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POI推荐中的天气因素及RNN相关论文">
+<meta name="twitter:description" content="一些相关论文的记录  Understanding the Impact of Weather for POI Recommendations加入天气特征 温度，云量，湿度和降水强度等 实验： 对比未加入天气特征以及加入天气特征的同一种算法准确度 与使用时间变量的算法对比 度量每一种天气特征的影响程度">
+<meta name="twitter:image" content="http://yoursite.com/post/f04b8b8d/PACE网络结构.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/post/f04b8b8d.html"/>
+
+
+
+
+
+  <title>POI推荐中的天气因素及RNN相关论文 | Think Island</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Think Island</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/post/f04b8b8d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lhy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Think Island">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POI推荐中的天气因素及RNN相关论文</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T10:13:27+08:00">
+                2018-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>一些相关论文的记录</p>
+</blockquote>
+<h2 id="Understanding-the-Impact-of-Weather-for-POI-Recommendations"><a href="#Understanding-the-Impact-of-Weather-for-POI-Recommendations" class="headerlink" title="Understanding the Impact of Weather for POI Recommendations"></a>Understanding the Impact of Weather for POI Recommendations</h2><h3 id="加入天气特征"><a href="#加入天气特征" class="headerlink" title="加入天气特征"></a>加入天气特征</h3><ul>
+<li>温度，云量，湿度和降水强度等</li>
+<li>实验：<ul>
+<li>对比未加入天气特征以及加入天气特征的同一种算法准确度</li>
+<li>与使用时间变量的算法对比</li>
+<li>度量每一种天气特征的影响程度</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h3 id="问题陈述"><a href="#问题陈述" class="headerlink" title="问题陈述"></a>问题陈述</h3><p>这是一个POI推荐问题，已知条件有：</p>
+<ul>
+<li>用户u的check-in历史记录$L^u$</li>
+<li>当前天气条件$C=\{ c_1,c_2, \dots ,c_{\lvert C \rvert } \}$。天气条件有：温度、风速、压力等。</li>
+</ul>
+<p>期待的结果是：</p>
+<ul>
+<li>用户u未来会访问的且不在$L^u$中的POIs$\hat{L}^u$</li>
+</ul>
+<h3 id="需要研究的问题"><a href="#需要研究的问题" class="headerlink" title="需要研究的问题"></a>需要研究的问题</h3><ul>
+<li>天气条件与数据集中用户的check-in行为有关吗？</li>
+<li>天气上下文信息如何与已有的推荐系统结合？</li>
+<li>使用天气特征能否优化现有POI推荐结果？</li>
+<li>哪一种天气特征对推荐结果的影响最大？</li>
+</ul>
+<h3 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h3><ul>
+<li>大多数工作使用的上下文信息为：check-in历史、社交关系、时间和地理位置</li>
+<li>有两个工作（Martin和Meehan）使用了天气因素，但没有实施也没有评估。</li>
+<li>Braunhofer 等人做了一项关于意大利旅游地点推荐的手机APP上的推荐系统，作者对54位用户进行了在线研究，发现考虑到天气信息的推荐确实能够提高用户的满意度。在作者早期的工作中，对推荐系统进行了实施和评估。</li>
+<li>本文的工作使用了更先进的算法和更多的天气特征，，提供了更多的算法实施细节和特征贡献度分析细节。</li>
+</ul>
+<h3 id="推荐方法"><a href="#推荐方法" class="headerlink" title="推荐方法"></a>推荐方法</h3><ul>
+<li>建立在最先进的基于MF方法的个性化排序POI推荐算法Rank-GeoFM上。选择原因：<ul>
+<li>更强大（对比s user-KNN, item-KNN CF, WRMF, BPR-MF和BPP）</li>
+<li>更容易将额外的特征添加进去</li>
+</ul>
+</li>
+<li>三元组（user,  POI,  context）</li>
+<li>天气特征离散化</li>
+<li>加入3个潜在特征矩阵$L^{(2)}$，$L^{(3)}$，$F^{(1)}$和一个权重矩阵$WI$</li>
+</ul>
+<h3 id="推荐方法总结"><a href="#推荐方法总结" class="headerlink" title="推荐方法总结"></a>推荐方法总结</h3><p>在已有的方法中拓展天气因素，加入潜在特征矩阵和权重矩阵，和原方法中拓展时间上下文因素的方式一致。</p>
+<h3 id="实验与结论"><a href="#实验与结论" class="headerlink" title="实验与结论"></a>实验与结论</h3><p>论文研究了各个城市的天气情况，选取了四个城市作为实验对象。结果发现一些天气因素比时间因素的实验表现还要好。不同城市影响最大的天气因素略有不同。</p>
+<h2 id="Bridging-Collaborative-Filtering-and-Semi-Supervised-Learning-A-Neural-Approach-for-POI-Recommendation"><a href="#Bridging-Collaborative-Filtering-and-Semi-Supervised-Learning-A-Neural-Approach-for-POI-Recommendation" class="headerlink" title="Bridging Collaborative Filtering and Semi-Supervised Learning:A Neural Approach for POI Recommendation"></a>Bridging Collaborative Filtering and Semi-Supervised Learning:A Neural Approach for POI Recommendation</h2><p>使用Neural embedding桥接CF和基于图的SSL</p>
+<h3 id="总体框架"><a href="#总体框架" class="headerlink" title="总体框架"></a>总体框架</h3><ul>
+<li>输入： 简单的one-hot编码向量</li>
+<li>输出： softmax顶层输出0-1预测值，代表用户$u_i$对地点$p_j$是否感兴趣；另两个个softmax层分别输出一个向量代表用户$u_i$/地点$p_j$与所有用户/地点的在上下文图中的相关性</li>
+<li><p>目的： 优化三个输出部分的损失加权和</p>
+<script type="math/tex; mode=display">\begin{align}
+  L & = L_p + \lambda_1 L_{C_u} + \lambda_2 L_{C_p} \\
+  & = L_p+L_C \\
+  \end{align}</script><p>  $L_p$可以看作有监督损失，$L_C$可以看作无监督损失或者用于强化用户/场所及其上下文之间的平滑的正规化惩罚</p>
+</li>
+<li><p>网络结构<br><img src="/post/f04b8b8d/PACE网络结构.PNG" alt="网络结构"></p>
+</li>
+</ul>
+<h2 id="Predicting-the-Next-Location-A-Recurrent-Model-with-Spatial-and-Temporal-Contexts"><a href="#Predicting-the-Next-Location-A-Recurrent-Model-with-Spatial-and-Temporal-Contexts" class="headerlink" title="Predicting the Next Location:A Recurrent Model with Spatial and Temporal Contexts"></a>Predicting the Next Location:A Recurrent Model with Spatial and Temporal Contexts</h2><h3 id="一些参数定义"><a href="#一些参数定义" class="headerlink" title="一些参数定义"></a>一些参数定义</h3><ul>
+<li>P：用户集合</li>
+<li>Q：地点集合</li>
+<li>p_u/q_v：用户u/地点v的隐向量，d维</li>
+<li>$\{ x_v, y_v \}$：地点v的坐标</li>
+<li>$Q^u = \{ q_{t1}^u, q_{t2}^u, \dots \}$：用户u在每个时间点$t_i$去过的地点列表</li>
+<li>$Q^U = \{ Q^{u_1}, Q^{u_2}, \dots \}$：所有的用户的历史记录</li>
+</ul>
+<h3 id="RNN基本结构"><a href="#RNN基本结构" class="headerlink" title="RNN基本结构"></a>RNN基本结构</h3><ul>
+<li>隐含层状态计算方法：<script type="math/tex; mode=display">h_{t_k}^u = f(Mq_{t_k}^u + Ch_{t_k-1}^u)</script><ul>
+<li>$h_{t_k}^u$表示用户和时间tk条件下的隐含状态</li>
+<li>$q_{t_k}^u$表示用户u在时间tk访问的地点的隐向量</li>
+<li>M/C为当前输入/历史序列的权重矩阵</li>
+<li>f()为sigmod函数</li>
+</ul>
+</li>
+<li>输出：<script type="math/tex; mode=display">\hat Y_{t_k}^u = f(Wh_{t_k}^u)</script></li>
+</ul>
+<h3 id="RNN加上时间上下文"><a href="#RNN加上时间上下文" class="headerlink" title="RNN加上时间上下文"></a>RNN加上时间上下文</h3><ul>
+<li>将M替换为具体于时间的转换矩阵,隐含层状态计算方法：<script type="math/tex; mode=display">h_t^u = f(\sum_{q_{t_i}^u \in Q^u, t-w<t_i<t} T_{t-ti}q_{t_i}^u + Ch_{t-w}^u)</script><ul>
+<li>w：时间窗口的长度，在窗口内的元素将被模型的每一层模拟（时间窗口内分不同的时间间隔）</li>
+<li>$T_{t-ti}$代表时间t之前的时间间隔$t-t_i$的具体于时间的转换矩阵，它捕获元素在最近历史中的影响，并将连续时间间隔纳入考虑</li>
+</ul>
+</li>
+</ul>
+<h3 id="RNN加上时间和空间上下文-STRNN"><a href="#RNN加上时间和空间上下文-STRNN" class="headerlink" title="RNN加上时间和空间上下文-STRNN"></a>RNN加上时间和空间上下文-STRNN</h3><ul>
+<li><p>添加具体于距离的转换矩阵，隐含层计算方法：</p>
+<script type="math/tex; mode=display">h_{t，q_t^u}^u = f(\sum_{q_{t_i}^u \in Q^u, t-\hat w<t_i<t}S_{q_t^u-q_{t_i}^u}T_{t-ti}q_{t_i}^u + Ch_{t-\hat w, q_{t-\hat w}^u}^u)</script><ul>
+<li>$S_{q_t^u-q_{t_i}^u}$代表距离$q_t^u-q_{t_i}^u$的具体于距离的转换矩阵,$S_{q_t^u-q_{t_i}^u} = \left | x_t^u-x_{t_i}^u, y_t^u-y_{t_i}^u \right |_2$</li>
+<li>由于$q_{t-w}^u$通常不在$Q^u$里，用近似的$\hat w$代替w，满足$\hat w$是最接近w的值（或大或小），且$q_{t-\hat w}^u$在$Q^u$中。</li>
+<li>t&lt;w时，有：<script type="math/tex; mode=display">h_{t，q_t^u}^u = f(\sum_{q_{t_i}^u \in Q^u, 0<t_i<t}S_{q_t^u-q_{t_i}^u}T_{t-ti}q_{t_i}^u + Ch_0^u)</script>  其中，$h_0^u$为初始状态</li>
+</ul>
+</li>
+<li><p>预测输出用户u是否会在时间t访问地点v：</p>
+<script type="math/tex; mode=display">o_{u,t,v} = (h_{t，q_v}^u + p_u)^Tq_v</script><ul>
+<li>$p_u$代表用户恒定的特征，比如兴趣和活动半径</li>
+<li>$h_{t，q_v}^u$代表用户的短时兴趣和特定的时空上下文</li>
+</ul>
+</li>
+</ul>
+<h3 id="转换矩阵的线性插值"><a href="#转换矩阵的线性插值" class="headerlink" title="转换矩阵的线性插值"></a>转换矩阵的线性插值</h3><p>如果为所有可能的连续时间间隔和地理距离学习转移矩阵，将会导致数据稀疏性问题，所以要将时间间隔和地理距离离散化。只有当前容器的上界U和下界L对应的转移矩阵会被学习，容器内的时间间隔和距离对应的转移矩阵由线性插值得到，时间间隔$t_d$和地理距离$l_d$分别对应的转移矩阵$T_{t_d}$和$S_{l_d}$可以计算如下：</p>
+<pre><code>$$T_{t_d} = \frac{\left[ T_{L(t_d)}(U(t_d)-t_d)+ T_{U(t_d)}(t_d-L(t_d)) \right]}{\left[ (U(t_d)-t_d)+ (t_d-L(t_d)) \right]}$$
+$$S_{l_d} = \frac{\left[ S_{L(l_d)}(U(l_d)-l_d)+ S_{U(l_d)}(l_d-L(l_d)) \right]}{\left[ (U(l_d)-l_d)+ (l_d-L(l_d)) \right]}$$
+</code></pre><h3 id="学习方法"><a href="#学习方法" class="headerlink" title="学习方法"></a>学习方法</h3><p>使用BPR和BPTT</p>
+<ul>
+<li>最大化以下概率：<script type="math/tex; mode=display">p(u,t,v>v') = g(o_{u,t,v}-o_{u,t,v'})</script><ul>
+<li>$g(x)=\frac{1}{1+e^{-x}}$</li>
+</ul>
+</li>
+<li>结合negiative log-likelihood，即交叉熵损失函数，上式等价于：<script type="math/tex; mode=display">J=\sum ln(1+e^{-（o_{u,t,v}-o_{u,t,v'}）})+ \frac{\lambda}{2}\left \| \Theta \right \|^2</script><ul>
+<li>$\Theta = \{P,Q,S,T,C\}$</li>
+</ul>
+</li>
+<li>J先对式中显式的元素求导，然后再用BPTT进一步求导，得到的结果再得到SGD迭代公式。<br><img src="/post/f04b8b8d/STRNN学习方法.PNG" alt="SGD迭代过程"></li>
+</ul>
+<h2 id="SESSION-BASED-RECOMMENDATIONS-WITH-RECURRENT-NEURAL-NETWORKS"><a href="#SESSION-BASED-RECOMMENDATIONS-WITH-RECURRENT-NEURAL-NETWORKS" class="headerlink" title="SESSION-BASED RECOMMENDATIONS WITH RECURRENT NEURAL NETWORKS"></a>SESSION-BASED RECOMMENDATIONS WITH RECURRENT NEURAL NETWORKS</h2><h3 id="使用RNN推荐"><a href="#使用RNN推荐" class="headerlink" title="使用RNN推荐"></a>使用RNN推荐</h3><h4 id="标准RNN更新隐含状态的方法"><a href="#标准RNN更新隐含状态的方法" class="headerlink" title="标准RNN更新隐含状态的方法"></a>标准RNN更新隐含状态的方法</h4><script type="math/tex; mode=display">h_t = g(Wx_t + Uh_{t-1})</script><ul>
+<li>g是一个平滑且有界的函数，比如sigmoid函数</li>
+<li>$x_t$是t时刻的输入</li>
+<li>RNN的输出是给定现在的时刻t，序列下一个元素的概率分布</li>
+</ul>
+<h4 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h4><p>更新实质上是上一个状态$h_{t-1}$与候选状态$\hat h_t$之间的插值结果：</p>
+<script type="math/tex; mode=display">h_t = (1-z_t)h_{t-1} + z_t\hat h_t</script><p>其中，更新门为：</p>
+<script type="math/tex; mode=display">z_t = \sigma (W_zx_t + U_zh_{t-1})</script><p>候选状态的计算方法为：</p>
+<script type="math/tex; mode=display">\hat h_t = tanh(Wx_t + U(r_t \odot h_{t-1}))</script><p>其中，重置门为：</p>
+<script type="math/tex; mode=display">r_t = \sigma (W_rx_t + U_rh_{t-1})</script><ul>
+<li>重置门有助于捕捉时序数据中短期的依赖关系。</li>
+<li>更新门有助于捕捉时序数据中长期的依赖关系。</li>
+</ul>
+<h4 id="定制版的GRU"><a href="#定制版的GRU" class="headerlink" title="定制版的GRU"></a>定制版的GRU</h4><ul>
+<li>输入：会话的实际状态，既可以是实际事件中涉及的物品，也可以是迄今为止的会议中的事件。</li>
+<li>输出：会话中下一个事件涉及的物品</li>
+<li>输入处理：1-of-N编码，标准化</li>
+<li><p>网络关键：</p>
+<ul>
+<li>多层GRU层，前一层的输出是后一层的输入，实验表明，将输入层选择性地连接到更深的GRU层可以改进结果。</li>
+<li>在最后一层GRU层和输出层之间加上一层额外的前馈层</li>
+</ul>
+</li>
+<li><p>网络结构<br><img src="/post/f04b8b8d/定制GRU结构图.PNG" alt="GRU结构图"></p>
+</li>
+</ul>
+<h5 id="并行会话的小批量"><a href="#并行会话的小批量" class="headerlink" title="并行会话的小批量"></a>并行会话的小批量</h5><p>给所有会话排序，一次过X个会话（输入为前一个事件，输出为后一个事件），当有会话结束时按顺序填上第X+1，X+2，……个会话，同时基于会话相互独立的假设，更新隐含状态。示意图如下：<br><img src="/post/f04b8b8d/GRU会话并行小批量.PNG" alt="小批量示意图"></p>
+<h5 id="输出采样"><a href="#输出采样" class="headerlink" title="输出采样"></a>输出采样</h5><p>每一步计算所有物品的得分会导致巨大的计算量（复杂度为物品量x事件量）。为了解决这一问题，要对输出进行采样，只计算物品中很小一部分的得分，即只更新网络中的小部分权重。</p>
+<ul>
+<li>按照物品的流行度进行抽样。因为一个物品越流行，用户不知道它的概率就越低，同时，知道它而不选择它（不喜欢它）的概率就越高。</li>
+<li>我们使用小批量中其他训练样例中的物品作为反例。（减少计算量，降低复杂度，同时也遵从了基于流行度的抽样）</li>
+</ul>
+<h5 id="基于排名的损失"><a href="#基于排名的损失" class="headerlink" title="基于排名的损失"></a>基于排名的损失</h5><p>因为本文任务只推荐一个物品，所以ListWise也可以通过PairWise途径解决。</p>
+<ul>
+<li>BPR</li>
+<li>TOP1</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/REC/" rel="tag"># REC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/7afcc1e2.html" rel="next" title="MLSS'14 Netflix关于推荐系统的talk阅读笔记">
+                <i class="fa fa-chevron-left"></i> MLSS'14 Netflix关于推荐系统的talk阅读笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+       
+         <div onclick="ShowGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+         <div id="gitment-container" style="display:none"></div>
+       
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="lhy" />
+          <p class="site-author-name" itemprop="name">lhy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/chamlhy" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-the-Impact-of-Weather-for-POI-Recommendations"><span class="nav-number">1.</span> <span class="nav-text">Understanding the Impact of Weather for POI Recommendations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加入天气特征"><span class="nav-number">1.1.</span> <span class="nav-text">加入天气特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题陈述"><span class="nav-number">1.2.</span> <span class="nav-text">问题陈述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#需要研究的问题"><span class="nav-number">1.3.</span> <span class="nav-text">需要研究的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关工作"><span class="nav-number">1.4.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推荐方法"><span class="nav-number">1.5.</span> <span class="nav-text">推荐方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推荐方法总结"><span class="nav-number">1.6.</span> <span class="nav-text">推荐方法总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验与结论"><span class="nav-number">1.7.</span> <span class="nav-text">实验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bridging-Collaborative-Filtering-and-Semi-Supervised-Learning-A-Neural-Approach-for-POI-Recommendation"><span class="nav-number">2.</span> <span class="nav-text">Bridging Collaborative Filtering and Semi-Supervised Learning:A Neural Approach for POI Recommendation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总体框架"><span class="nav-number">2.1.</span> <span class="nav-text">总体框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Predicting-the-Next-Location-A-Recurrent-Model-with-Spatial-and-Temporal-Contexts"><span class="nav-number">3.</span> <span class="nav-text">Predicting the Next Location:A Recurrent Model with Spatial and Temporal Contexts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些参数定义"><span class="nav-number">3.1.</span> <span class="nav-text">一些参数定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN基本结构"><span class="nav-number">3.2.</span> <span class="nav-text">RNN基本结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN加上时间上下文"><span class="nav-number">3.3.</span> <span class="nav-text">RNN加上时间上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN加上时间和空间上下文-STRNN"><span class="nav-number">3.4.</span> <span class="nav-text">RNN加上时间和空间上下文-STRNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转换矩阵的线性插值"><span class="nav-number">3.5.</span> <span class="nav-text">转换矩阵的线性插值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习方法"><span class="nav-number">3.6.</span> <span class="nav-text">学习方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SESSION-BASED-RECOMMENDATIONS-WITH-RECURRENT-NEURAL-NETWORKS"><span class="nav-number">4.</span> <span class="nav-text">SESSION-BASED RECOMMENDATIONS WITH RECURRENT NEURAL NETWORKS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用RNN推荐"><span class="nav-number">4.1.</span> <span class="nav-text">使用RNN推荐</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标准RNN更新隐含状态的方法"><span class="nav-number">4.1.1.</span> <span class="nav-text">标准RNN更新隐含状态的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GRU"><span class="nav-number">4.1.2.</span> <span class="nav-text">GRU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定制版的GRU"><span class="nav-number">4.1.3.</span> <span class="nav-text">定制版的GRU</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#并行会话的小批量"><span class="nav-number">4.1.3.1.</span> <span class="nav-text">并行会话的小批量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#输出采样"><span class="nav-number">4.1.3.2.</span> <span class="nav-text">输出采样</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于排名的损失"><span class="nav-number">4.1.3.3.</span> <span class="nav-text">基于排名的损失</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lhy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+   
+   
+   
+   
+   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+   
+       <script type="text/javascript">
+           function ShowGitment(){
+               document.getElementById("gitment-display-button").style.display = "none";
+               document.getElementById("gitment-container").style.display = "block";
+               var gitment = new Gitment({
+                   id: window.location.pathname, 
+                   owner: 'chamlhy',
+                   repo: 'lhy9comment',
+                   oauth: {
+                       client_id: '096b3c7f63f33ed0967b',
+                       client_secret: '8c475778ba49e97751f8c7d0a982e9459b684010',
+                   }});
+               gitment.render('gitment-container');
+           }
+       </script>
+   
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
