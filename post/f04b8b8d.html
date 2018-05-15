@@ -106,7 +106,7 @@
 <meta property="og:image" content="http://yoursite.com/post/f04b8b8d/STRNN学习方法.PNG">
 <meta property="og:image" content="http://yoursite.com/post/f04b8b8d/定制GRU结构图.PNG">
 <meta property="og:image" content="http://yoursite.com/post/f04b8b8d/GRU会话并行小批量.PNG">
-<meta property="og:updated_time" content="2018-05-15T02:20:37.493Z">
+<meta property="og:updated_time" content="2018-05-15T02:26:33.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="POI推荐中的天气因素及RNN相关论文">
 <meta name="twitter:description" content="一些相关论文的记录  Understanding the Impact of Weather for POI Recommendations加入天气特征 温度，云量，湿度和降水强度等 实验： 对比未加入天气特征以及加入天气特征的同一种算法准确度 与使用时间变量的算法对比 度量每一种天气特征的影响程度">
@@ -435,9 +435,7 @@
 </li>
 </ul>
 <h3 id="转换矩阵的线性插值"><a href="#转换矩阵的线性插值" class="headerlink" title="转换矩阵的线性插值"></a>转换矩阵的线性插值</h3><p>如果为所有可能的连续时间间隔和地理距离学习转移矩阵，将会导致数据稀疏性问题，所以要将时间间隔和地理距离离散化。只有当前容器的上界U和下界L对应的转移矩阵会被学习，容器内的时间间隔和距离对应的转移矩阵由线性插值得到，时间间隔$t_d$和地理距离$l_d$分别对应的转移矩阵$T_{t_d}$和$S_{l_d}$可以计算如下：</p>
-<pre><code>$$T_{t_d} = \frac{\left[ T_{L(t_d)}(U(t_d)-t_d)+ T_{U(t_d)}(t_d-L(t_d)) \right]}{\left[ (U(t_d)-t_d)+ (t_d-L(t_d)) \right]}$$
-$$S_{l_d} = \frac{\left[ S_{L(l_d)}(U(l_d)-l_d)+ S_{U(l_d)}(l_d-L(l_d)) \right]}{\left[ (U(l_d)-l_d)+ (l_d-L(l_d)) \right]}$$
-</code></pre><h3 id="学习方法"><a href="#学习方法" class="headerlink" title="学习方法"></a>学习方法</h3><p>使用BPR和BPTT</p>
+<script type="math/tex; mode=display">T_{t_d} = \frac{\left[ T_{L(t_d)}(U(t_d)-t_d)+ T_{U(t_d)}(t_d-L(t_d)) \right]}{\left[ (U(t_d)-t_d)+ (t_d-L(t_d)) \right]}</script><script type="math/tex; mode=display">S_{l_d} = \frac{\left[ S_{L(l_d)}(U(l_d)-l_d)+ S_{U(l_d)}(l_d-L(l_d)) \right]}{\left[ (U(l_d)-l_d)+ (l_d-L(l_d)) \right]}</script><h3 id="学习方法"><a href="#学习方法" class="headerlink" title="学习方法"></a>学习方法</h3><p>使用BPR和BPTT</p>
 <ul>
 <li>最大化以下概率：<script type="math/tex; mode=display">p(u,t,v>v') = g(o_{u,t,v}-o_{u,t,v'})</script><ul>
 <li>$g(x)=\frac{1}{1+e^{-x}}$</li>
